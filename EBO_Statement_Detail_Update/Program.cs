@@ -14,18 +14,34 @@ namespace EBO_Statement_Detail_Update
 
             AMC_Functions.GeneralFunctions oGenFun = new AMC_Functions.GeneralFunctions();
 
-            bool TestMode = false;
+            bool TestMode = true;
 
             DateTime StartTime = DateTime.Now;
 
             DateTime EndTime;
 
-            
 
             if (UserName == "MACRO" || UserName == "ADMINISTRATOR")
             {
-                // run all clients, so query for all
-                EBO_Statement_Detail_Update oStatementUpdate = new EBO_Statement_Detail_Update(TestMode);
+                try
+                {
+                    // run all clients, so query for all
+                    EBO_Statement_Detail_Update oStatementUpdate = new EBO_Statement_Detail_Update(TestMode);
+
+                    // after completion, store the current time, to pass through for the write log function
+                    EndTime = DateTime.Now;
+
+                    // write the log file, as long as it gets through
+                    oGenFun.WriteLogFile(true, StartTime, EndTime, false, "jerrodr");
+                }
+                catch (Exception Ex)
+                {
+                    // after completion, store the current time, to pass through for the write log function
+                    EndTime = DateTime.Now;
+
+                    oGenFun.WriteLogFile(false, StartTime, EndTime, true, "jerrodr", Ex);
+                }
+                
             }
             else
             {
